@@ -1,0 +1,171 @@
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
+public class Mesaj1Martie {
+
+    private static final String HTML_TEMPLATE = """
+        <!DOCTYPE html>
+        <html lang="ro">
+        <head>
+            <meta charset="UTF-8">
+            <title>La mulți ani de 1 Martie 🌸</title>
+            <style>
+                @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Open+Sans:wght@400;600&display=swap');
+
+                body {
+                    margin: 0;
+                    height: 100vh;
+                    background: linear-gradient(270deg, #ffe6f2, #fff0f5, #ffe6ff);
+                    background-size: 600% 600%;
+                    animation: gradientMove 15s ease infinite;
+                    font-family: 'Open Sans', sans-serif;
+                    overflow: hidden;
+                }
+
+                @keyframes gradientMove {
+                    0% {background-position: 0% 50%;}
+                    50% {background-position: 100% 50%;}
+                    100% {background-position: 0% 50%;}
+                }
+
+                .container {
+                    position: relative;
+                    max-width: 800px;
+                    background: rgba(255, 255, 255, 0.9);
+                    margin: 5% auto;
+                    padding: 50px 60px;
+                    border-radius: 25px;
+                    box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+                    backdrop-filter: blur(6px);
+                    z-index: 10;
+                    animation: fadeInUp 2s ease;
+                }
+
+                @keyframes fadeInUp {
+                    0% {opacity: 0; transform: translateY(50px);}
+                    100% {opacity: 1; transform: translateY(0);}
+                }
+
+                h1 {
+                    font-family: 'Playfair Display', serif;
+                    text-align: center;
+                    color: #c1121f;
+                    font-size: 36px;
+                    margin-bottom: 30px;
+                }
+
+                p {
+                    font-size: 18px;
+                    color: #333;
+                    text-align: justify;
+                    line-height: 1.7;
+                }
+
+                footer {
+                    text-align: center;
+                    margin-top: 40px;
+                    font-size: 16px;
+                    color: #999;
+                    opacity: 0;
+                    transition: opacity 2s ease;
+                }
+
+                /* MĂRȚIȘOARE animate */
+                .martisor {
+                    position: absolute;
+                    bottom: -20px;
+                    font-size: 20px;
+                    animation: floatUp 10s infinite linear;
+                    opacity: 0.8;
+                }
+
+                @keyframes floatUp {
+                    0% {transform: translateY(0); opacity: 0.8;}
+                    100% {transform: translateY(-110vh); opacity: 0;}
+                }
+            </style>
+        </head>
+        <body>
+
+            <!-- Mărțișoare plutitoare -->
+            <script>
+                const symbols = ['🌸','🌺','🌷','💮'];
+                for (let i = 0; i < 30; i++) {
+                    let m = document.createElement('div');
+                    m.className = 'martisor';
+                    m.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                    m.style.left = Math.random() * 100 + 'vw';
+                    m.style.animationDuration = (7 + Math.random() * 6) + 's';
+                    m.style.fontSize = (15 + Math.random() * 20) + 'px';
+                    document.body.appendChild(m);
+                }
+            </script>
+
+            <div class="container">
+                <h1>🌸 La mulți ani de 1 Martie! 🌸</h1>
+                
+                <p id="typing"></p>
+
+                <footer id="footer"></footer>
+            </div>
+
+            <script>
+                const message = `Dragi fete,
+
+La mulți ani cu ocazia acestei frumoase zile de 1 Martie!
+Vă doresc ca primăvara să vă aducă în suflet lumină, zâmbete sincere,
+momente magice alături de cei dragi și multe amintiri de neuitat.
+
+Fiecare zi să fie o sărbătoare a bucuriei, iubirii și frumuseții,
+iar inima voastră să fie mereu plină de speranță și energie pozitivă.
+
+Să pășiți în această primăvară cu încredere, eleganță și fericire,
+iar fiecare pas să vă aducă numai realizări și clipe minunate.`;
+
+                let index = 0;
+                const el = document.getElementById('typing');
+                const footer = document.getElementById('footer');
+
+                function type() {
+                    if(index < message.length){
+                        el.textContent += message[index];
+                        index++;
+                        setTimeout(type, 25);
+                    } else {
+                        footer.textContent = "Cu drag 🌷";
+                        footer.style.opacity = 1;
+                    }
+                }
+
+                type();
+            </script>
+        </body>
+        </html>
+    """;
+
+    public static void main(String[] args) {
+        try {
+            File file = createHtmlFile("Mesaj_1_Martie_Animat.html", HTML_TEMPLATE);
+            openInBrowser(file);
+        } catch (IOException e) {
+            System.err.println("Eroare: " + e.getMessage());
+        }
+    }
+
+    private static File createHtmlFile(String fileName, String content) throws IOException {
+        File file = new File(System.getProperty("java.io.tmpdir"), fileName);
+        try (FileWriter writer = new FileWriter(file, false)) {
+            writer.write(content);
+        }
+        return file;
+    }
+
+    private static void openInBrowser(File file) throws IOException {
+        if (Desktop.isDesktopSupported()) {
+            Desktop.getDesktop().browse(file.toURI());
+            System.out.println("Mesajul animat de 1 Martie s-a deschis în browser. 🌸");
+        }
+    }
+}
